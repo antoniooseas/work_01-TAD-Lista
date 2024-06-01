@@ -194,6 +194,36 @@ static void on_forward_button_clicked(GtkWidget *widget, gpointer data)
   verificarBotoes();
 }
 
+void on_random_image_gray_clicked(GtkWidget *widget, gpointer data)
+{
+  (void)widget;
+  (void)data;
+
+  if (rand() % 2)
+    on_neq90_rotation_gray_clicked(NULL, NULL);
+
+  if (rand() % 2)
+    on_add90_rotation_gray_clicked(NULL, NULL);
+
+  if (rand() % 2)
+    on_median_blur_gray_button_clicked(NULL, NULL);
+
+  if (rand() % 2)
+    on_clahe_gray_button_clicked(NULL, NULL);
+
+  if (rand() % 2)
+    on_flip_horizontal_gray_button_clicked(NULL, NULL);
+
+  if (rand() % 2)
+    on_flip_vertical_gray_button_clicked(NULL, NULL);
+
+  if (rand() % 2)
+    on_transpose_gray_button_clicked(NULL, NULL);
+
+  refresh_image_gray();
+  verificarBotoes();
+}
+
 void setup_ui_Gray(GtkWidget *stack)
 {
   iniciarHistoricoGray();
@@ -256,7 +286,7 @@ void setup_ui_Gray(GtkWidget *stack)
   gtk_box_pack_start(GTK_BOX(menuBox), medianBlurButtonGray, TRUE, TRUE, 5);
 
   GtkWidget *randomButton = gtk_button_new_with_label("---Imagem Aleatória---");
-  g_signal_connect(randomButton, "clicked", G_CALLBACK(NULL), NULL);
+  g_signal_connect(randomButton, "clicked", G_CALLBACK(on_random_image_gray_clicked), NULL);
   gtk_box_pack_start(GTK_BOX(menuBox), randomButton, TRUE, TRUE, 5);
 
   navBoxGray = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);

@@ -28,6 +28,7 @@ typedef struct imgHistoricoRGB
   struct imgHistoricoRGB *prev;
   struct imgHistoricoRGB *next;
   ButtonStatus buttonStatus;
+  FuncUsed funcUsed;
 } ImgHistoricoRGB;
 
 typedef struct imgHistoricoGray
@@ -44,12 +45,16 @@ extern ImgHistoricoRGB *historicoRGBAtual;
 extern ImgHistoricoGray *historicoGrayInicio;
 extern ImgHistoricoGray *historicoGrayAtual;
 
+ImageGray *refrashHistoricFuncGray(FuncUsed funcUsed);
+
 void iniciarHistoricoRGB();
 void removerValoresAFrenteRGB();
 void adicionarHistoricoRGB(ImageRGB *newImgRGB, FuncUsed funcUsed);
 void SeguirHistoricoRGB();
 void VoltarHistoricoRGB();
 void removerHistoricoRGB();
+
+ImageRGB *refrashHistoricFuncRGB(FuncUsed funcUsed);
 
 void iniciarHistoricoGray();
 void removerValoresAFrenteGray();
@@ -58,4 +63,3 @@ void SeguirHistoricoGray();
 void VoltarHistoricoGray();
 void removerHistoricoGray();
 
-ImageGray *refrashHistoricFuncGray(FuncUsed funcUsed);
