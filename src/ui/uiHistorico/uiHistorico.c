@@ -30,6 +30,9 @@ void iniciarHistoricoRGB()
   historicoRGBInicio->buttonStatus.transpose = 0;
   historicoRGBInicio->buttonStatus.clahe = 0;
   historicoRGBInicio->buttonStatus.median_blur = 0;
+  historicoRGBInicio->funcUsed = NONE;
+  historicoRGBInicio->buttonStatus.qtdFlipAdd90 = 0;
+  historicoRGBInicio->buttonStatus.qtdFlipNeq90 = 0;
 
   historicoRGBInicio->prev = NULL;
   historicoRGBInicio->next = NULL;
