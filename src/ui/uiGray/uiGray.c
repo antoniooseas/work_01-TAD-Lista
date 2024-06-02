@@ -137,7 +137,7 @@ static void on_median_blur_gray_button_clicked(GtkWidget *widget, gpointer data)
   }
   else if (!historicoGrayAtual->buttonStatus.median_blur)
   {
-    ImageGray *newImage = median_blur_gray(historicoGrayAtual->imgGray, 4);
+    ImageGray *newImage = median_blur_gray(historicoGrayAtual->imgGray, 3);
     adicionarHistoricoGray(newImage, MEDIAN_BLUR);
   }
 

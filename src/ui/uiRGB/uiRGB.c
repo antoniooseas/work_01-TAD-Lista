@@ -220,8 +220,16 @@ static void on_filter_clahe_rgb_button_clicked(GtkWidget *widget, gpointer data)
   (void)widget;
   (void)data;
 
-  ImageRGB *newImgRGB = clahe_rgb(historicoRGBAtual->imgRGB, 8, 8);
-  adicionarHistoricoRGB(newImgRGB, CLAHE);
+  if(historicoRGBAtual->buttonStatus.clahe)
+  {
+    ImageRGB *newImgRGB = refrashHistoricFuncRGB(CLAHE);
+    adicionarHistoricoRGB(newImgRGB, CLAHE);
+  }
+  else
+  {
+    ImageRGB *newImgRGB = clahe_rgb(historicoRGBAtual->imgRGB, 512, 512);
+    adicionarHistoricoRGB(newImgRGB, CLAHE);
+  }
 
   atualizarImagem();
   verificarBotoes();
@@ -232,8 +240,16 @@ static void on_filter_median_rgb_button_clicked(GtkWidget *widget, gpointer data
   (void)widget;
   (void)data;
 
-  ImageRGB *newImgRGB = median_blur_rgb(historicoRGBAtual->imgRGB, 3);
-  adicionarHistoricoRGB(newImgRGB, MEDIAN_BLUR);
+  if(historicoRGBAtual->buttonStatus.median_blur)
+  {
+    ImageRGB *newImgRGB = refrashHistoricFuncRGB(MEDIAN_BLUR);
+    adicionarHistoricoRGB(newImgRGB, MEDIAN_BLUR);
+  }
+  else
+  {
+    ImageRGB *newImgRGB = median_blur_rgb(historicoRGBAtual->imgRGB, 3);
+    adicionarHistoricoRGB(newImgRGB, MEDIAN_BLUR);
+  }
 
   atualizarImagem();
   verificarBotoes();
