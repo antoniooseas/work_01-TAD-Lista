@@ -71,29 +71,29 @@ void adicionarHistoricoRGB(ImageRGB *newImgRGB, FuncUsed funcUsed)
 
   switch (funcUsed)
   {
-    case FLIP_HORIZONTAL:
-      novaEntrada->buttonStatus.flip_horizontal = !novaEntrada->buttonStatus.flip_horizontal;
-      break;
-    case FLIP_VERTICAL:
-      novaEntrada->buttonStatus.flip_vertical = !novaEntrada->buttonStatus.flip_vertical;
-      break;
-    case TRANSPOSE:
-      novaEntrada->buttonStatus.transpose = !novaEntrada->buttonStatus.transpose;
-      break;
-    case CLAHE:
-      novaEntrada->buttonStatus.clahe = !novaEntrada->buttonStatus.clahe;
-      break;
-    case MEDIAN_BLUR:
-      novaEntrada->buttonStatus.median_blur = !novaEntrada->buttonStatus.median_blur;
-      break;
-    case FLIP_ADD90:
-      novaEntrada->buttonStatus.qtdFlipAdd90++;
-      break;
-    case FLIP_NEQ90:
-      novaEntrada->buttonStatus.qtdFlipNeq90++;
-      break;
-    default:
-      break;
+  case FLIP_HORIZONTAL:
+    novaEntrada->buttonStatus.flip_horizontal = !novaEntrada->buttonStatus.flip_horizontal;
+    break;
+  case FLIP_VERTICAL:
+    novaEntrada->buttonStatus.flip_vertical = !novaEntrada->buttonStatus.flip_vertical;
+    break;
+  case TRANSPOSE:
+    novaEntrada->buttonStatus.transpose = !novaEntrada->buttonStatus.transpose;
+    break;
+  case CLAHE:
+    novaEntrada->buttonStatus.clahe = !novaEntrada->buttonStatus.clahe;
+    break;
+  case MEDIAN_BLUR:
+    novaEntrada->buttonStatus.median_blur = !novaEntrada->buttonStatus.median_blur;
+    break;
+  case FLIP_ADD90:
+    novaEntrada->buttonStatus.qtdFlipAdd90++;
+    break;
+  case FLIP_NEQ90:
+    novaEntrada->buttonStatus.qtdFlipNeq90++;
+    break;
+  default:
+    break;
   }
 
   if (historicoRGBInicio == NULL)
@@ -132,36 +132,35 @@ ImageGray *refrashHistoricFuncGray(FuncUsed funcUsed)
     {
       switch (aux->funcUsed)
       {
-        case FLIP_HORIZONTAL:
-          newImage = flip_horizontal_gray(newImage);
-          break;
-        case FLIP_VERTICAL:
-          newImage = flip_vertical_gray(newImage);
-          break;
-        case TRANSPOSE:
-          newImage = transpose_gray(newImage);
-          break;
-        case CLAHE:
-          if (historicoGrayAtual->buttonStatus.clahe)
-            newImage = clahe_gray(newImage, 512, 512);
-          break;
-        case MEDIAN_BLUR:
-          if (historicoGrayAtual->buttonStatus.median_blur)
-            newImage = median_blur_gray(newImage, 3);
-          break;
-        case FLIP_ADD90:
-          newImage = add90_rotation_gray(newImage);
-          break;
-        case FLIP_NEQ90:
-          newImage = neq90_rotation_gray(newImage);
-          break;
-        default:
-          break;
+      case FLIP_HORIZONTAL:
+        newImage = flip_horizontal_gray(newImage);
+        break;
+      case FLIP_VERTICAL:
+        newImage = flip_vertical_gray(newImage);
+        break;
+      case TRANSPOSE:
+        newImage = transpose_gray(newImage);
+        break;
+      case CLAHE:
+        if (historicoGrayAtual->buttonStatus.clahe)
+          newImage = clahe_gray(newImage, 512, 512);
+        break;
+      case MEDIAN_BLUR:
+        if (historicoGrayAtual->buttonStatus.median_blur)
+          newImage = median_blur_gray(newImage, 3);
+        break;
+      default:
+        break;
       }
     }
-
     aux = aux->next;
   } while (aux != NULL);
+
+  for (int i = 0; i < historicoGrayAtual->buttonStatus.qtdFlipAdd90; i++)
+    newImage = add90_rotation_gray(newImage);
+
+  for (int i = 0; i < historicoGrayAtual->buttonStatus.qtdFlipNeq90; i++)
+    newImage = neq90_rotation_gray(newImage);
 
   return newImage;
 }
@@ -202,7 +201,7 @@ void iniciarHistoricoGray()
   historicoGrayInicio->buttonStatus.median_blur = 0;
   historicoGrayInicio->funcUsed = NONE;
 
-  historicoGrayInicio->buttonStatus.qtdFlipAdd90 = 0; 
+  historicoGrayInicio->buttonStatus.qtdFlipAdd90 = 0;
   historicoGrayInicio->buttonStatus.qtdFlipNeq90 = 0;
 
   historicoGrayInicio->prev = NULL;
@@ -243,29 +242,29 @@ void adicionarHistoricoGray(ImageGray *newImgGray, FuncUsed funcUsed)
 
   switch (funcUsed)
   {
-    case FLIP_HORIZONTAL:
-      novaEntrada->buttonStatus.flip_horizontal = !novaEntrada->buttonStatus.flip_horizontal;
-      break;
-    case FLIP_VERTICAL:
-      novaEntrada->buttonStatus.flip_vertical = !novaEntrada->buttonStatus.flip_vertical;
-      break;
-    case TRANSPOSE:
-      novaEntrada->buttonStatus.transpose = !novaEntrada->buttonStatus.transpose;
-      break;
-    case CLAHE:
-      novaEntrada->buttonStatus.clahe = !novaEntrada->buttonStatus.clahe;
-      break;
-    case MEDIAN_BLUR:
-      novaEntrada->buttonStatus.median_blur = !novaEntrada->buttonStatus.median_blur;
-      break;
-    case FLIP_ADD90:
-      novaEntrada->buttonStatus.qtdFlipAdd90++;
-      break;
-    case FLIP_NEQ90:
-      novaEntrada->buttonStatus.qtdFlipNeq90++;
-      break;
-    default:
-      break;
+  case FLIP_HORIZONTAL:
+    novaEntrada->buttonStatus.flip_horizontal = !novaEntrada->buttonStatus.flip_horizontal;
+    break;
+  case FLIP_VERTICAL:
+    novaEntrada->buttonStatus.flip_vertical = !novaEntrada->buttonStatus.flip_vertical;
+    break;
+  case TRANSPOSE:
+    novaEntrada->buttonStatus.transpose = !novaEntrada->buttonStatus.transpose;
+    break;
+  case CLAHE:
+    novaEntrada->buttonStatus.clahe = !novaEntrada->buttonStatus.clahe;
+    break;
+  case MEDIAN_BLUR:
+    novaEntrada->buttonStatus.median_blur = !novaEntrada->buttonStatus.median_blur;
+    break;
+  case FLIP_ADD90:
+    novaEntrada->buttonStatus.qtdFlipAdd90++;
+    break;
+  case FLIP_NEQ90:
+    novaEntrada->buttonStatus.qtdFlipNeq90++;
+    break;
+  default:
+    break;
   }
 
   if (historicoGrayInicio == NULL)

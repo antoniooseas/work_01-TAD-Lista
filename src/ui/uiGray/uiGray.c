@@ -33,9 +33,6 @@ static void atualizarToggleBotao(GtkWidget *button, gboolean estado, GCallback c
 
 static void verificarBotoes()
 {
-  atualizarToggleBotao(flipHorizontalButtonGray, historicoGrayAtual->buttonStatus.flip_horizontal, G_CALLBACK(on_flip_horizontal_gray_button_clicked));
-  atualizarToggleBotao(flipVerticalButtonGray, historicoGrayAtual->buttonStatus.flip_vertical, G_CALLBACK(on_flip_vertical_gray_button_clicked));
-  atualizarToggleBotao(transposeButtonGray, historicoGrayAtual->buttonStatus.transpose, G_CALLBACK(on_transpose_gray_button_clicked));
   atualizarToggleBotao(claheButtonGray, historicoGrayAtual->buttonStatus.clahe, G_CALLBACK(on_clahe_gray_button_clicked));
   atualizarToggleBotao(medianBlurButtonGray, historicoGrayAtual->buttonStatus.median_blur, G_CALLBACK(on_median_blur_gray_button_clicked));
 
@@ -140,7 +137,7 @@ static void on_median_blur_gray_button_clicked(GtkWidget *widget, gpointer data)
   }
   else if (!historicoGrayAtual->buttonStatus.median_blur)
   {
-    ImageGray *newImage = median_blur_gray(historicoGrayAtual->imgGray, 3);
+    ImageGray *newImage = median_blur_gray(historicoGrayAtual->imgGray, 4);
     adicionarHistoricoGray(newImage, MEDIAN_BLUR);
   }
 
@@ -265,16 +262,16 @@ void setup_ui_Gray(GtkWidget *stack)
   counterLabelNeq90 = gtk_label_new("0");
   gtk_box_pack_start(GTK_BOX(rotateBoxNeq90), counterLabelNeq90, TRUE, TRUE, 5);
 
-  flipHorizontalButtonGray = gtk_toggle_button_new_with_label("Flip Horizontal");
-  g_signal_connect(flipHorizontalButtonGray, "toggled", G_CALLBACK(on_flip_horizontal_gray_button_clicked), NULL);
+  flipHorizontalButtonGray = gtk_button_new_with_label("Flip Horizontal");
+  g_signal_connect(flipHorizontalButtonGray, "clicked", G_CALLBACK(on_flip_horizontal_gray_button_clicked), NULL);
   gtk_box_pack_start(GTK_BOX(menuBox), flipHorizontalButtonGray, TRUE, TRUE, 5);
 
-  flipVerticalButtonGray = gtk_toggle_button_new_with_label("Flip Vertical");
-  g_signal_connect(flipVerticalButtonGray, "toggled", G_CALLBACK(on_flip_vertical_gray_button_clicked), NULL);
+  flipVerticalButtonGray = gtk_button_new_with_label("Flip Vertical");
+  g_signal_connect(flipVerticalButtonGray, "clicked", G_CALLBACK(on_flip_vertical_gray_button_clicked), NULL);
   gtk_box_pack_start(GTK_BOX(menuBox), flipVerticalButtonGray, TRUE, TRUE, 5);
 
-  transposeButtonGray = gtk_toggle_button_new_with_label("Transpose");
-  g_signal_connect(transposeButtonGray, "toggled", G_CALLBACK(on_transpose_gray_button_clicked), NULL);
+  transposeButtonGray = gtk_button_new_with_label("Transpose");
+  g_signal_connect(transposeButtonGray, "clicked", G_CALLBACK(on_transpose_gray_button_clicked), NULL);
   gtk_box_pack_start(GTK_BOX(menuBox), transposeButtonGray, TRUE, TRUE, 5);
 
   claheButtonGray = gtk_toggle_button_new_with_label("filtro CLAHE");
