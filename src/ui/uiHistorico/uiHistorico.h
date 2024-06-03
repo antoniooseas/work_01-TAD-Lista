@@ -1,7 +1,8 @@
 
 #include <imgStruct.h>
 
-typedef enum funcUsed {
+typedef enum funcUsed
+{
   NONE,
   FLIP_VERTICAL,
   FLIP_HORIZONTAL,
@@ -12,7 +13,8 @@ typedef enum funcUsed {
   FLIP_NEQ90,
 } FuncUsed;
 
-typedef struct ButtonStatus{
+typedef struct ButtonStatus
+{
   int flip_vertical;
   int flip_horizontal;
   int transpose;
@@ -45,8 +47,6 @@ extern ImgHistoricoRGB *historicoRGBAtual;
 extern ImgHistoricoGray *historicoGrayInicio;
 extern ImgHistoricoGray *historicoGrayAtual;
 
-ImageGray *refrashHistoricFuncGray(FuncUsed funcUsed);
-
 void iniciarHistoricoRGB();
 void removerValoresAFrenteRGB();
 void adicionarHistoricoRGB(ImageRGB *newImgRGB, FuncUsed funcUsed);
@@ -63,3 +63,4 @@ void SeguirHistoricoGray();
 void VoltarHistoricoGray();
 void removerHistoricoGray();
 
+ImageGray *refrashHistoricFuncGray(FuncUsed funcUsed);
