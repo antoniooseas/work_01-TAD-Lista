@@ -38,13 +38,14 @@ int start(int argc, char *argv[])
   gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(aboutDialog), "Trabalho de Estrutura de Dados I");
 
   // Adicione a URL do site
-  gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(aboutDialog), "https://github.com/rayss4lves/work_01-TAD-Lista");
+  gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(aboutDialog), "Github");
+  gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(aboutDialog), "https://github.com/rayss4lves/work_01-TAD-Lista");
 
   // Corrigido: Adicionado uma vírgula no final do array de autores
   gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(aboutDialog), (const gchar *[]){"Kauã Henrique", "Flavio Lima", "Rayssa Alves", NULL});
   gtk_about_dialog_set_license_type(GTK_ABOUT_DIALOG(aboutDialog), GTK_LICENSE_GPL_3_0);
   gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(aboutDialog), TRUE);
-  gtk_about_dialog_set_logo_icon_name(GTK_ABOUT_DIALOG(aboutDialog), "image-x-generic");
+  gtk_about_dialog_set_logo_icon_name(GTK_ABOUT_DIALOG(aboutDialog), "emblem-favorite");
 
   setup_ui_rgb(stack);
   setup_ui_Gray(stack);

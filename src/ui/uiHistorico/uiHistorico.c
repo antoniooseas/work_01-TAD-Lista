@@ -149,19 +149,74 @@ ImageGray *refrashHistoricFuncGray(FuncUsed funcUsed)
           if (historicoGrayAtual->buttonStatus.median_blur)
             newImage = median_blur_gray(newImage, 3);
           break;
-        case FLIP_ADD90:
-          newImage = add90_rotation_gray(newImage);
+        default:
           break;
-        case FLIP_NEQ90:
-          newImage = neq90_rotation_gray(newImage);
+      }
+    }
+    aux = aux->next;
+  } while (aux != NULL);
+
+  for (int i = 0; i < historicoGrayAtual->buttonStatus.qtdFlipAdd90; i++)
+    newImage = add90_rotation_gray(newImage);
+
+  for (int i = 0; i < historicoGrayAtual->buttonStatus.qtdFlipNeq90; i++)
+    newImage = neq90_rotation_gray(newImage);
+
+  return newImage;
+}
+
+ImageRGB *refrashHistoricFuncRGB(FuncUsed funcUsed)
+{
+  if (historicoRGBAtual == NULL || historicoRGBInicio == NULL)
+  {
+    fprintf(stderr, "Erro: histórico atual ou inicial é nulo.\n");
+    return NULL;
+  }
+
+  ImageRGB *newImage = create_image_rgb(historicoRGBInicio->imgRGB->dim.altura, historicoRGBInicio->imgRGB->dim.largura);
+  if (newImage == NULL)
+  {
+    fprintf(stderr, "Erro ao alocar memória para nova imagem.\n");
+    return NULL;
+  }
+
+  newImage = read_imageRGB("imgRGB.txt");
+  ImgHistoricoRGB *aux = historicoRGBInicio;
+  do
+  {
+    if (funcUsed != aux->funcUsed)
+    {
+      switch (aux->funcUsed)
+      {
+        case FLIP_HORIZONTAL:
+          newImage = flip_horizontal_rgb(newImage);
+          break;
+        case FLIP_VERTICAL:
+          newImage = flip_vertical_rgb(newImage);
+          break;
+        case TRANSPOSE:
+          newImage = transpose_rgb(newImage);
+          break;
+        case CLAHE:
+          if (historicoRGBAtual->buttonStatus.clahe)
+            newImage = clahe_rgb(newImage, 512, 512);
+          break;
+        case MEDIAN_BLUR:
+          if (historicoRGBAtual->buttonStatus.median_blur)
+            newImage = median_blur_rgb(newImage, 3);
           break;
         default:
           break;
       }
     }
-
     aux = aux->next;
   } while (aux != NULL);
+
+  for (int i = 0; i < historicoRGBAtual->buttonStatus.qtdFlipAdd90; i++)
+    newImage = add90_rotation_RGB(newImage);
+
+  for (int i = 0; i < historicoRGBAtual->buttonStatus.qtdFlipNeq90; i++)
+    newImage = neq90_rotation_RGB(newImage);
 
   return newImage;
 }
@@ -202,7 +257,7 @@ void iniciarHistoricoGray()
   historicoGrayInicio->buttonStatus.median_blur = 0;
   historicoGrayInicio->funcUsed = NONE;
 
-  historicoGrayInicio->buttonStatus.qtdFlipAdd90 = 0; 
+  historicoGrayInicio->buttonStatus.qtdFlipAdd90 = 0;
   historicoGrayInicio->buttonStatus.qtdFlipNeq90 = 0;
 
   historicoGrayInicio->prev = NULL;
