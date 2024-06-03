@@ -122,6 +122,12 @@ static void on_random_button_clicked(GtkWidget *widget, gpointer data)
 
   if(rand() % 2)
     on_transpose_rgb_button_clicked(NULL, NULL);
+  
+  if(rand() % 2)
+    on_filter_clahe_rgb_button_clicked(NULL, NULL);
+  
+  if(rand() % 2)
+    on_filter_median_rgb_button_clicked(NULL, NULL);
 
   atualizarImagem();
   verificarBotoes();
