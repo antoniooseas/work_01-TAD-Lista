@@ -67,6 +67,7 @@ void adicionarHistoricoRGB(ImageRGB *newImgRGB, FuncUsed funcUsed)
   novaEntrada->buttonStatus = historicoRGBAtual->buttonStatus;
   novaEntrada->imgRGB = newImgRGB;
   novaEntrada->prev = historicoRGBAtual;
+  novaEntrada->funcUsed = funcUsed;
   novaEntrada->next = NULL;
 
   switch (funcUsed)
