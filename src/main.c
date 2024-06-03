@@ -2,7 +2,7 @@
 #include <imgGray.h>
 #include<stdio.h>
 
-int main()
+int main()  
 {
   start(0, NULL); 
   return 0;
