@@ -61,15 +61,15 @@ void setup_ui_rgb(GtkWidget *stack)
   labelContRotateNeq90RGB = gtk_label_new("0");
   gtk_box_pack_start(GTK_BOX(rotateBoxRGBneq90), labelContRotateNeq90RGB, TRUE, TRUE, 5);
 
-  flipHorizontalButtonRGB = gtk_toggle_button_new_with_label("Flip Horizontal");
-  g_signal_connect(flipHorizontalButtonRGB, "toggled", G_CALLBACK(on_flip_horizontal_rgb_button_clicked), NULL);
+  flipHorizontalButtonRGB = gtk_button_new_with_label("Flip Horizontal");
+  g_signal_connect(flipHorizontalButtonRGB, "clicked", G_CALLBACK(on_flip_horizontal_rgb_button_clicked), NULL);
   gtk_box_pack_start(GTK_BOX(menuBox), flipHorizontalButtonRGB, TRUE, TRUE, 5);
 
-  flipVerticalButtonRGB = gtk_toggle_button_new_with_label("Flip Vertical");
+  flipVerticalButtonRGB = gtk_button_new_with_label("Flip Vertical");
   g_signal_connect(flipVerticalButtonRGB, "clicked", G_CALLBACK(on_flip_vertical_rgb_button_clicked), NULL);
   gtk_box_pack_start(GTK_BOX(menuBox), flipVerticalButtonRGB, TRUE, TRUE, 5);
 
-  transposeButtonRGB = gtk_toggle_button_new_with_label("Transpose");
+  transposeButtonRGB = gtk_button_new_with_label("Transpose");
   g_signal_connect(transposeButtonRGB, "clicked", G_CALLBACK(on_transpose_rgb_button_clicked), NULL);
   gtk_box_pack_start(GTK_BOX(menuBox), transposeButtonRGB, TRUE, TRUE, 5);
 
@@ -141,9 +141,6 @@ static void atualizarToggleBotaoRGB(GtkWidget *button, gboolean estado, GCallbac
 
 static void verificarBotoes()
 {
-  atualizarToggleBotaoRGB(flipHorizontalButtonRGB, historicoRGBAtual->buttonStatus.flip_horizontal, G_CALLBACK(on_flip_horizontal_rgb_button_clicked));
-  atualizarToggleBotaoRGB(flipVerticalButtonRGB, historicoRGBAtual->buttonStatus.flip_vertical, G_CALLBACK(on_flip_vertical_rgb_button_clicked));
-  atualizarToggleBotaoRGB(transposeButtonRGB, historicoRGBAtual->buttonStatus.transpose, G_CALLBACK(on_transpose_rgb_button_clicked));
   atualizarToggleBotaoRGB(claheButtonRGB, historicoRGBAtual->buttonStatus.clahe, G_CALLBACK(on_filter_clahe_rgb_button_clicked));
   atualizarToggleBotaoRGB(medianBlurButtonRGB, historicoRGBAtual->buttonStatus.median_blur, G_CALLBACK(on_filter_median_rgb_button_clicked));
 
