@@ -5,11 +5,11 @@
 
 ImageGray *create_image_gray(int largura, int altura)
 {
-  ImageGray *img = calloc(1, sizeof(ImageGray));
+  ImageGray *img = malloc(sizeof(ImageGray));
 
   img->dim.altura = altura;
   img->dim.largura = largura;
-  img->pixels = calloc((largura * altura), sizeof(PixelGray));
+  img->pixels = malloc((largura * altura) * sizeof(PixelGray));
 
   return img;
 }
@@ -81,7 +81,7 @@ ImageGray *flip_vertical_gray(ImageGray *image)
   {
     return NULL;
   }
-  // Aqui ira copiar os pixels da imagem original para a nova imagem e inverter ela verticalmente.
+  // Os pixels da imagem gray original serão copiados na nova imagem, porem invertidos verticalmente
   for (int i = 0; i < altura; ++i)
   {
     for (int x = 0; x < largura; ++x)
@@ -102,22 +102,22 @@ ImageGray *flip_horizontal_gray(ImageGray *image)
   int largura = image->dim.largura;
   int altura = image->dim.altura;
 
-  ImageGray *nova_imagem_horizontal = create_image_gray(largura, altura);
+  ImageGray *imagem_horizontal = create_image_gray(largura, altura);
 
-  if (nova_imagem_horizontal == NULL)
+  if (imagem_horizontal == NULL)
   {
     return NULL;
   }
-
+  // Os pixels da imagem gray original serão copiados na nova imagem, porem invertidos horizontalmente
   for (int i = 0; i < altura; ++i)
   {
     for (int y = 0; y < largura; ++y)
     {
-      nova_imagem_horizontal->pixels[i * largura + (largura - 1 - y)] = image->pixels[i * largura + y];
+      imagem_horizontal->pixels[i * largura + (largura - 1 - y)] = image->pixels[i * largura + y];
     }
   }
 
-  return nova_imagem_horizontal;
+  return imagem_horizontal;
 }
 
 ImageGray *transpose_gray(const ImageGray *image)
@@ -133,6 +133,8 @@ ImageGray *transpose_gray(const ImageGray *image)
     return NULL;
   }
 
+  // Os pixels da imagem gray original serão copiados na nova imagem, porem traspostos, trocando
+  // os valores das linhas pelos das colunas
   for (int i = 0; i < largura; i++)
   {
     for (int j = 0; j < altura; j++)
@@ -146,6 +148,9 @@ ImageGray *transpose_gray(const ImageGray *image)
 // Funcao para calcular os valores do histograma
 void calcular_histograma(int fim_x, int inicio_x, int fim_y, int inicio_y, int *histograma, const ImageGray *img, int largura)
 {
+
+  // Aqui serao contados quantas vezes cada valor da imagem gray aparece em um determinado local
+  // da imagem e guarda em um array, para saber as cores que mais apareceram em um local da imagem
   for (int y = inicio_y; y < fim_y; ++y)
   {
     for (int x = inicio_x; x < fim_x; ++x)
@@ -174,7 +179,8 @@ void limite_histograma(int *histograma, int num_blocos, int limite_corte)
   int incremento = excesso / num_blocos;
   int limite_superior = limite_corte - incremento;
 
-  // ajuste do histograma
+  excesso = 0;
+  // aqui o estograma sera ajustado e havera a redestribuicao do excesso
   for (int i = 0; i < num_blocos; ++i)
   {
     if (histograma[i] > limite_superior)
@@ -185,10 +191,10 @@ void limite_histograma(int *histograma, int num_blocos, int limite_corte)
     else
     {
       histograma[i] += incremento;
-      excesso -= incremento;
     }
   }
-  // destribuicao do excesso
+
+  // destribuicao do excesso que sobrou da primeira destricuicao
   for (int i = 0; i < num_blocos && excesso > 0; ++i)
   {
     if (histograma[i] < limite_corte)
@@ -199,6 +205,8 @@ void limite_histograma(int *histograma, int num_blocos, int limite_corte)
   }
 }
 
+// Essa funcao caula a destribuicao dos diferentes tons de cinza na imagem,
+// somando as contagens de pixels e ajustando para um intervalo de 0 a 255
 void calcular_destribuicao(const int *histograma, int num_blocos, int total_pixels, int *cdf)
 {
   cdf[0] = histograma[0];
@@ -210,7 +218,47 @@ void calcular_destribuicao(const int *histograma, int num_blocos, int total_pixe
 
   for (int i = 0; i < num_blocos; ++i)
   {
-    cdf[i] = (int)(((float)cdf[i] / total_pixels) * 255.0f);
+    cdf[i] = (int)(((float)cdf[i] / total_pixels) * 255.0);
+  }
+}
+
+void Processar_bloco(int inicio_x, int fim_x, int inicio_y, int fim_y, const ImageGray *imagem, int largura, int altura, int *histograma, int num_bins, int limite_corte, ImageGray *resultado, int *cdf)
+{
+  // Ajustar os limites se for necessario para a ultima coluna ou linha
+  if (fim_x > largura)
+    fim_x = largura;
+  if (fim_y > altura)
+    fim_y = altura;
+
+  calcular_histograma(fim_x, inicio_x, fim_y, inicio_y, histograma, imagem, largura);
+
+  limite_histograma(histograma, num_bins, limite_corte);
+
+  int regiao_pixels = (fim_x - inicio_x) * (fim_y - inicio_y);
+
+  calcular_destribuicao(histograma, num_bins, regiao_pixels, cdf);
+
+  for (int y = inicio_y; y < fim_y; ++y)
+  {
+    for (int x = inicio_x; x < fim_x; ++x)
+    {
+      int valor_pixel = imagem->pixels[y * largura + x].value;
+      int novo_valor = cdf[valor_pixel];
+
+      // Limitar a intensidade do pixel para evitar contraste muito alto
+      if (novo_valor > 255)
+      {
+        resultado->pixels[y * largura + x].value = 255;
+      }
+      else if (novo_valor < 0)
+      {
+        resultado->pixels[y * largura + x].value = 0;
+      }
+      else
+      {
+        resultado->pixels[y * largura + x].value = novo_valor;
+      }
+    }
   }
 }
 
@@ -231,10 +279,10 @@ ImageGray *clahe_gray(const ImageGray *imagem, int tile_width, int tile_height)
   int num_blocos_vertical = (altura + tile_height - 1) / tile_height;
 
   int num_bins = 256;
-  int *histograma = (int *)calloc(largura * altura, sizeof(int));
+  int *histograma = (int *)malloc(largura * altura * sizeof(int));
 
   // usado para redestribuir os valores do histograma
-  int *cdf = (int *)calloc(num_bins, sizeof(int));
+  int *cdf = (int*)malloc(num_bins * sizeof(int));
 
   if (!histograma || !cdf)
   {
@@ -244,9 +292,9 @@ ImageGray *clahe_gray(const ImageGray *imagem, int tile_width, int tile_height)
     return NULL;
   }
 
-  for (int id_vertical = 0; id_vertical < num_blocos_vertical; ++id_vertical)
+  for (int id_vertical = 0; id_vertical < num_blocos_vertical; id_vertical++)
   {
-    for (int id_horizontal = 0; id_horizontal < num_blocos_horizontal; ++id_horizontal)
+    for (int id_horizontal = 0; id_horizontal < num_blocos_horizontal; id_horizontal++)
     {
       for (int i = 0; i < largura * altura; i++)
         histograma[i] = 0;
@@ -258,34 +306,15 @@ ImageGray *clahe_gray(const ImageGray *imagem, int tile_width, int tile_height)
 
       // Ajustar os limites se for necessario para a ultima coluna ou linha
       if (fim_x > largura)
-        fim_x = largura;
-      if (fim_y > altura)
-        fim_y = altura;
-
-      calcular_histograma(fim_x, inicio_x, fim_y, inicio_y, histograma, imagem, largura);
-
-      limite_histograma(histograma, num_bins, limite_corte);
-
-      int regiao_pixels = (fim_x - inicio_x) * (fim_y - inicio_y);
-
-      calcular_destribuicao(histograma, num_bins, regiao_pixels, cdf);
-
-      for (int y = inicio_y; y < fim_y; ++y)
       {
-        for (int x = inicio_x; x < fim_x; ++x)
-        {
-          int valor_pixel = imagem->pixels[y * largura + x].value;
-          int novo_valor = cdf[valor_pixel];
-
-          // Limitar a intensidade do pixel para evitar contraste muito alto
-          if (novo_valor > 255)
-            resultado->pixels[y * largura + x].value = 255;
-          else if (novo_valor < 0)
-            resultado->pixels[y * largura + x].value = 0;
-          else
-            resultado->pixels[y * largura + x].value = novo_valor;
-        }
+        fim_x = largura;
       }
+      if (fim_y > altura)
+      {
+        fim_y = altura;
+      }
+
+      Processar_bloco(inicio_x, fim_x, inicio_y, fim_y, imagem, largura, altura, histograma, num_bins, limite_corte, resultado, cdf);
     }
   }
 
@@ -301,13 +330,22 @@ int getPixel(const ImageGray *image, int x, int y)
   int altura = image->dim.altura;
 
   if (x < 0)
+  {
     x = 0;
+  }
   else if (x >= largura)
+  {
     x = largura - 1;
+  }
   if (y < 0)
+  {
     y = 0;
+  }
   else if (y >= altura)
+  {
     y = altura - 1;
+  }
+
   return image->pixels[y * largura + x].value;
 }
 
@@ -334,13 +372,21 @@ void setPixel(ImageGray *image, int x, int y, int valor)
   int altura = image->dim.altura;
 
   if (x < 0)
+  {
     x = 0;
+  }
   else if (x >= largura)
+  {
     x = largura - 1;
+  }
   if (y < 0)
+  {
     y = 0;
+  }
   else if (y >= altura)
+  {
     y = altura - 1;
+  }
 
   image->pixels[y * largura + x].value = valor;
 }
